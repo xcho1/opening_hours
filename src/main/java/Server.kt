@@ -38,15 +38,16 @@ class Server {
 
         for (i in 0 until daysOfWeek.size) {
             val hours = json[daysOfWeek[i]] as JSONArray
-            var openingHours = ""
 
             if (hours.length() == 0 || hours.length() == 1 && (hours[0] as JSONObject)["type"] == "close") {
-                System.out.println("${daysOfWeek[i]}: Closed")
+                println("${daysOfWeek[i]}: Closed")
                 dayList.add("${daysOfWeek[i].capitalize()}: Closed")
                 continue
             }
 
+            var openingHours = ""
             val startIndex = if ((hours[0] as JSONObject)["type"] == "close") 1 else 0
+
             for (j in startIndex until hours.length()) {
                 openingHours += convertUnixTime((hours[j] as JSONObject)["value"] as Int) +
                         if ((hours[j] as JSONObject)["type"] == "open") " - " else ", "
@@ -59,17 +60,15 @@ class Server {
                 val index = if( i + 1 == daysOfWeek.size) 0 else i + 1
                 openingHours += getClosingHourFromNextDay(json[daysOfWeek[index]] as JSONArray)
             }
-            System.out.println("${daysOfWeek[i]}: $openingHours")
+            println("${daysOfWeek[i]}: $openingHours")
             dayList.add("${daysOfWeek[i].capitalize()}: $openingHours")
         }
 
         return dayList
     }
 
-    private fun convertUnixTime(unixTime: Int): String {
-        val sdf = SimpleDateFormat("hh:mm a")
-        sdf.timeZone = TimeZone.getTimeZone("GMT")
-        val date = Date(unixTime * 1000L)
-        return sdf.format(date)
-    }
+    private fun convertUnixTime(unixTime: Int): String =
+            SimpleDateFormat("hh:mm a").apply {
+                timeZone = TimeZone.getTimeZone("GMT")
+            }.format(Date(unixTime * 1000L))
 }
