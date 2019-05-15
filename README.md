@@ -17,7 +17,7 @@ Data is then processed and displayed on a simple `HTML` page.
 * **Method:** `POST`
 * **Path:** `/opening_hours`
 
-###JSON Format
+### JSON Format
 
 The existing format is a bit overcomplicated.
 
