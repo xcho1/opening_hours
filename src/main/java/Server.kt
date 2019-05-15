@@ -15,15 +15,14 @@ class Server {
 
     companion object {
         private const val PORT = 8080
-        private const val WORKING_HOURS_ROUTE = "/working_hours"
+        private const val OPENING_HOURS_PATH = "/opening_hours"
     }
 
     private val daysOfWeek = arrayOf("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
 
     init {
         port(PORT)
-        before(Filter { _, response ->  response.type("application/json")})
-        post(WORKING_HOURS_ROUTE, this::parseData, ThymeleafTemplateEngine())
+        post(OPENING_HOURS_PATH, this::parseData, ThymeleafTemplateEngine())
     }
 
     private fun parseData(request: Request, response: Response): ModelAndView {
